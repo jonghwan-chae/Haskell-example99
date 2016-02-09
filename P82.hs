@@ -16,15 +16,14 @@ A graph is defined as a set of nodes and a set of edges, where each edge is a pa
 cycles :: Eq a => a -> [(a, a)] -> [[a]]
 cycles p1 e = do 
     item <- getPath p1 e []
-    if 0 == length item then [] else if (head item) == (last item) then [item] else []
+    if (0 /= length item) && ((head item) == (last item)) then [item] else []
 
 getPath :: Eq a => a -> [(a, a)] -> [a] -> [[a]]
 getPath p1 edges checkrt 
     | (elem p1 checkrt) = [checkrt ++ [p1]]
     | otherwise     = do
         p  <- getReachableNode p1 edges
-        rt <- getPath p edges (checkrt ++ [p1])
-        [rt]
+        getPath p edges (checkrt ++ [p1])
 
 getReachableNode :: Eq a => a -> [(a, a)] -> [a]
 getReachableNode p1 es = do

@@ -24,8 +24,7 @@ getPath p1 edges checkrt
     | (elem p1 checkrt) = [checkrt]
     | otherwise     = do
         p  <- getReachableNode p1 edges
-        rt <- getPath p edges (checkrt ++ [p1])
-        [rt]
+        getPath p edges (checkrt ++ [p1])
 
 getReachableNode :: Eq a => a -> [(a, a)] -> [a]
 getReachableNode p1 es = do
