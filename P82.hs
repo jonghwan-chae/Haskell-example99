@@ -13,23 +13,31 @@ data Friendly a = Edge [(a, a)]     deriving (Show, Eq)
 A graph is defined as a set of nodes and a set of edges, where each edge is a pair of nodes.  
 -}
 
-graphToAdj :: Eq a => Graph a -> Adjacency a
-graphToAdj (Graph v e) = Adj (toAdjList v e)
-    where 
-        toAdjList vs es = do
-            v <- vs
-            [(v, toAdj v es)]
-        toAdj v es = do  
-            e <- es
-            if (fst e == v) then [snd e] else if (snd e == v) then [fst e] else []
+cycles :: Eq a => a -> [(a, a)] -> [[a]]
+cycles p1 e = do 
+    item <- getPath p1 e []
+    if 0 == length item then [] else if (head item) == (last item) then [item] else []
+
+getPath :: Eq a => a -> [(a, a)] -> [a] -> [[a]]
+getPath p1 edges checkrt 
+    | (elem p1 checkrt) = [checkrt ++ [p1]]
+    | otherwise     = do
+        p  <- getReachableNode p1 edges
+        rt <- getPath p edges (checkrt ++ [p1])
+        [rt]
+
+getReachableNode :: Eq a => a -> [(a, a)] -> [a]
+getReachableNode p1 es = do
+    edge <- es
+    if (p1 == fst edge) then [snd edge] else []
 
 
 {-
 Example in Haskell: 
 
-graph> cycle 2 [(1,2),(2,3),(1,3),(3,4),(4,2),(5,6)]
+graph> cycles 2 [(1,2),(2,3),(1,3),(3,4),(4,2),(5,6)]
 [[2,3,4,2]]
-graph> cycle 1 [(1,2),(2,3),(1,3),(3,4),(4,2),(5,6)]
+graph> cycles 1 [(1,2),(2,3),(1,3),(3,4),(4,2),(5,6)]
 []
 -}
 
