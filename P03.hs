@@ -1,8 +1,11 @@
 --
 -- Problem 03
 
-elementAt :: [a] -> Int -> a
-elementAt s n = (!!) s (n-1)
+elementAt :: [a] -> Int -> Maybe a
+elementAt (a:as) n 
+    | n <= 0    = Nothing
+    | n == 1    = Just a
+    | otherwise = elementAt as (n-1)
 
 main :: IO()
 main = do

@@ -1,9 +1,9 @@
 --
 -- Problem 01
 
-myList :: [a] -> Int
-myList [] = 0
-myList (a:as) = 1 + myList(as) 
+myList :: [a] -> a
+myList (a:[]) = a
+myList (a:as) = myList(as) 
 
 main :: IO()
 main = do
